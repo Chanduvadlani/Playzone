@@ -428,3 +428,7 @@ function rps(){
 function game2048(){
  let board=Array(16).fill(0),points=0;
  $('gameArea').innerHTML='<p id="result">Use arrow buttons or keyboard arrows.</p><div class="score" id="tileScore">Score: 0</div><div class="tiles" id="tiles"></div><div>'+['↑','←','↓','→'].map((v,i)=>`<button class="game-btn" onclick="slide(${i})">${v}</button>`).join('')+'</div><button class="secondary" onclick="rest
+// Start PlayZone when the page loads
+renderGames();
+updateStats();
+</script>

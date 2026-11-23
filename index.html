@@ -4,247 +4,427 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090d19">
 <title>PlayZone - Free Online Games</title>
+<meta name="description" content="Play free online arcade, puzzle, brain and casual games at PlayZone.">
 <style>
+:root{
+ --bg:#090d19;--panel:#131b2e;--panel2:#1b2540;
+ --text:#f4f6ff;--muted:#98a7c3;--line:#2b3854;
+ --purple:#987cff;--cyan:#50dfc7;--red:#ff6684;
+}
 *{box-sizing:border-box}
-body{margin:0;background:#0a0d19;color:#fff;font-family:Arial,sans-serif}
-header{padding:20px 6%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #242b40}
-.logo{font-size:25px;font-weight:900;color:#9d83ff}
-.logo span{color:#fff}
-button{cursor:pointer;border:0}
-.theme{background:#222941;color:white;padding:10px;border-radius:10px}
-.hero{text-align:center;padding:45px 15px 30px}
-.hero h1{font-size:clamp(35px,7vw,60px);margin:10px}
-.gradient{background:linear-gradient(90deg,#9b7cff,#4ce2ce);color:transparent;background-clip:text}
-.hero p{color:#a3aec7;line-height:1.6}
-.search{width:min(450px,90%);padding:14px;border-radius:12px;background:#171e31;border:1px solid #303b55;color:white;margin-top:15px}
-.categories{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:10px}
-.cat{padding:10px 17px;border-radius:25px;background:#1b2338;color:#dce3f6}
-.cat.active{background:#8e78f6;color:#fff}
-.grid{max-width:1100px;margin:25px auto;padding:0 18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
-.card{background:#141c30;border:1px solid #28334c;border-radius:18px;padding:22px;transition:.2s}
-.card:hover{transform:translateY(-5px);border-color:#8c78ff}
-.game-icon{font-size:42px}
-.card h3{margin:12px 0 7px}
-.card p{font-size:13px;color:#9eabc5;min-height:34px}
-.play{width:100%;padding:12px;background:linear-gradient(90deg,#947bff,#4acdbd);color:#101526;font-weight:bold;border-radius:10px}
-.section{max-width:850px;margin:25px auto;padding:0 15px}
-.panel{background:#141c30;border:1px solid #303b55;border-radius:18px;padding:22px;text-align:center}
+body{margin:0;background:var(--bg);color:var(--text);
+ font-family:system-ui,-apple-system,Arial,sans-serif;min-height:100vh}
+button,input,select{font:inherit}
+button{cursor:pointer}
+header{height:70px;padding:0 5%;display:flex;align-items:center;
+ justify-content:space-between;border-bottom:1px solid var(--line);
+ background:#0d1322;position:sticky;top:0;z-index:10}
+.logo{font-weight:1000;font-size:23px;letter-spacing:-1px;color:var(--purple)}
+.logo span{color:white}
+.header-actions{display:flex;gap:9px;align-items:center}
+.iconbtn,.navbtn{border:1px solid var(--line);background:var(--panel);
+ color:var(--text);border-radius:10px;padding:10px 13px}
+.layout{max-width:1250px;margin:auto;padding:0 20px}
+.hero{text-align:center;padding:55px 10px 35px}
+.tag{color:var(--cyan);font-size:11px;font-weight:800;letter-spacing:2px}
+.hero h1{font-size:clamp(38px,7vw,68px);letter-spacing:-3px;
+ margin:14px 0;line-height:1.1}
+.gradient{background:linear-gradient(90deg,#a58aff,#50dfc7);
+ color:transparent;background-clip:text}
+.hero p{color:var(--muted);line-height:1.7}
+.search{width:min(500px,100%);height:48px;margin-top:16px;
+ border:1px solid var(--line);border-radius:13px;background:var(--panel);
+ color:var(--text);padding:0 16px;outline:none}
+.search:focus{border-color:var(--purple)}
+.stats{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;
+ margin-top:25px;color:var(--muted);font-size:12px}
+.stats b{color:var(--text)}
+.ad{max-width:900px;margin:22px auto;border:1px dashed #35415b;
+ border-radius:12px;min-height:75px;display:grid;place-items:center;
+ color:#71809d;font-size:10px;letter-spacing:1.5px;text-align:center}
+.nav{display:flex;gap:9px;overflow-x:auto;padding:8px 0 18px}
+.navbtn{white-space:nowrap;color:var(--muted)}
+.navbtn.active{background:#302756;border-color:var(--purple);color:white}
+.section-title{display:flex;justify-content:space-between;align-items:center;
+ margin:15px 0}
+.section-title h2{font-size:21px;margin:0}
+.section-title small{color:var(--muted)}
+.games{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.game-card{background:linear-gradient(145deg,var(--panel),#101727);
+ border:1px solid var(--line);border-radius:17px;padding:18px;
+ transition:.2s;min-width:0}
+.game-card:hover{transform:translateY(-4px);border-color:var(--purple)}
+.game-icon{height:65px;display:grid;place-items:center;font-size:43px;
+ background:var(--panel2);border-radius:12px}
+.game-card h3{font-size:15px;margin:14px 0 5px}
+.game-card p{font-size:11px;color:var(--muted);min-height:32px;line-height:1.5}
+.meta{font-size:10px;color:var(--cyan);margin-bottom:12px}
+.playbtn,.primary{width:100%;border:0;border-radius:10px;padding:12px;
+ font-weight:800;color:#111529;background:linear-gradient(100deg,#a58aff,#50dfc7)}
+.playbtn:hover,.primary:hover{filter:brightness(1.1)}
+.secondary{background:var(--panel2);border:1px solid var(--line);
+ color:var(--text);border-radius:10px;padding:10px 14px}
+.page{max-width:850px;margin:25px auto 45px}
+.panel{background:var(--panel);border:1px solid var(--line);
+ border-radius:19px;padding:22px}
 .hidden{display:none!important}
-.back{background:#26314c;color:white;padding:10px 15px;border-radius:9px;float:left}
-.game-title{font-size:25px;margin:15px}
-#gameArea{clear:both;padding-top:20px;min-height:300px}
-.bigbtn{padding:13px 20px;background:#8f7bff;color:white;border-radius:10px;margin:5px;font-weight:bold}
-.board{display:grid;grid-template-columns:repeat(3,85px);justify-content:center;gap:8px;margin:20px}
-.cell{height:85px;background:#242d47;border-radius:12px;color:#fff;font-size:30px}
-.memory{display:grid;grid-template-columns:repeat(4,minmax(55px,75px));justify-content:center;gap:9px;margin:20px}
-.mem{height:75px;border-radius:10px;background:#303c60;color:white;font-size:25px}
-.numinput{padding:13px;border-radius:10px;border:1px solid #66718d;background:#0b1222;color:white;width:150px}
-footer{text-align:center;padding:35px;color:#7e8ba6;font-size:12px}
-.ad{max-width:800px;margin:30px auto;border:1px dashed #39435c;padding:22px;text-align:center;color:#687795;font-size:11px}
-.light{background:#edf0fa;color:#172039}
-.light .card,.light .panel{background:white;color:#172039}
-.light .hero p{color:#58647d}
-.light .theme{background:#dce2f3;color:#172039}
-.light .search{background:white;color:#172039}
-.light .cat{background:#dce2f3;color:#172039}
-@media(max-width:500px){header{padding:15px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.card{padding:14px}.game-icon{font-size:34px}.card p{font-size:12px}.board{grid-template-columns:repeat(3,75px)}.cell{height:75px}}
+.game-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.game-head h2{font-size:21px;margin:0}
+.game-area{text-align:center;padding:25px 5px;min-height:320px}
+.game-area p{color:var(--muted);line-height:1.6}
+.game-area h3{margin:10px}
+.game-btn{background:var(--purple);color:white;border:0;border-radius:10px;
+ padding:12px 17px;margin:5px;font-weight:700}
+.game-input{width:min(220px,100%);height:45px;background:#0b1220;
+ border:1px solid var(--line);border-radius:10px;padding:0 12px;
+ color:white;text-align:center}
+.board{display:grid;grid-template-columns:repeat(3,80px);
+ justify-content:center;gap:8px;margin:20px}
+.cell{height:80px;border:0;border-radius:12px;background:var(--panel2);
+ color:white;font-size:30px;font-weight:800}
+.memory-grid{display:grid;grid-template-columns:repeat(4,minmax(50px,75px));
+ justify-content:center;gap:8px;margin:20px}
+.mem{height:70px;background:var(--panel2);border:1px solid var(--line);
+ color:white;border-radius:10px;font-size:25px}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;
+ max-width:340px;margin:20px auto}
+.tile{height:67px;display:grid;place-items:center;border-radius:9px;
+ background:#26314c;font-size:20px;font-weight:900}
+.tile.filled{background:#6552a0}
+.score{color:var(--cyan);font-weight:800;font-size:14px}
+.result{font-size:16px;font-weight:700;margin:16px}
+footer{border-top:1px solid var(--line);margin-top:45px;
+ padding:30px 15px;text-align:center;color:var(--muted);font-size:12px}
+footer button{background:none;color:var(--muted);border:0;padding:8px}
+.info-page{line-height:1.8;color:var(--muted)}
+.info-page h2,.info-page h3{color:var(--text)}
+.achievement{padding:13px;background:var(--panel2);border-radius:12px;
+ margin:9px 0;display:flex;justify-content:space-between;gap:10px}
+.achievement b{color:var(--cyan)}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+ background:#eee9ff;color:#19142e;padding:12px 18px;border-radius:10px;
+ font-weight:700;font-size:12px;z-index:20;box-shadow:0 10px 35px #0007}
+.light{--bg:#eef1fb;--panel:#fff;--panel2:#e7ebf7;
+ --text:#172039;--muted:#65718b;--line:#d8dfef}
+.light header{background:#fff}
+.light .logo span{color:#172039}
+.light .game-card{background:#fff}
+.light .game-icon{background:#e7ebf7}
+.light .game-input{background:white;color:#172039}
+.light .cell,.light .mem{color:#172039}
+.light .navbtn.active{color:white}
+@media(max-width:900px){.games{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:620px){
+ header{height:60px;padding:0 13px}
+ .layout{padding:0 13px}
+ .hero{padding:38px 5px 22px}
+ .hero h1{letter-spacing:-2px}
+ .games{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .game-card{padding:12px}
+ .game-icon{height:57px;font-size:35px}
+ .game-card p{font-size:10px}
+ .game-head h2{font-size:17px}
+ .panel{padding:14px}
+ .board{grid-template-columns:repeat(3,72px)}
+ .cell{height:72px}
+ .stats{gap:13px}
+}
 </style>
 </head>
 <body>
 
 <header>
  <div class="logo">🎮 PLAY<span>ZONE</span></div>
- <button class="theme" onclick="document.body.classList.toggle('light')">☼ Theme</button>
+ <div class="header-actions">
+  <button class="iconbtn" id="soundBtn" onclick="toggleSound()">🔊</button>
+  <button class="iconbtn" onclick="toggleTheme()">☼</button>
+ </div>
 </header>
 
+<main class="layout">
+
 <div id="home">
-<section class="hero">
- <h1>WELCOME TO <span class="gradient">PLAYZONE</span></h1>
- <p>Discover games. Challenge your brain.<br>Play anytime, anywhere. Completely free.</p>
- <input class="search" id="search" placeholder="🔍 Search games..." oninput="renderGames()">
-</section>
+ <section class="hero">
+  <div class="tag">YOUR FREE ONLINE ARCADE</div>
+  <h1>ENTER THE <span class="gradient">PLAYZONE</span></h1>
+  <p>Play instantly. Challenge your brain.<br>Discover your next favourite game.</p>
+  <input id="search" class="search" placeholder="🔍 Search games..." oninput="renderGames()">
+  <div class="stats">
+   <span>🎮 <b id="gameCount">10</b> Games</span>
+   <span>⭐ <b id="totalScore">0</b> Points earned</span>
+   <span>🏆 <b id="playedCount">0</b> Games played</span>
+  </div>
+ </section>
 
-<div class="categories">
- <button class="cat active" onclick="setCat('All',this)">All Games</button>
- <button class="cat" onclick="setCat('Puzzle',this)">🧩 Puzzle</button>
- <button class="cat" onclick="setCat('Arcade',this)">🕹️ Arcade</button>
- <button class="cat" onclick="setCat('Brain',this)">🧠 Brain</button>
-</div>
+ <div class="ad">ADVERTISEMENT SPACE</div>
 
-<div class="grid" id="games"></div>
-
-<div class="ad">ADVERTISEMENT SPACE</div>
-</div>
-
-<section class="section hidden" id="gameScreen">
- <div class="panel">
-  <button class="back" onclick="goHome()">← Back</button>
-  <div class="game-title" id="gameTitle"></div>
-  <div id="gameArea"></div>
+ <div class="nav" id="categories">
+  <button class="navbtn active" onclick="setCategory('All',this)">🌟 All Games</button>
+  <button class="navbtn" onclick="setCategory('Arcade',this)">🕹️ Arcade</button>
+  <button class="navbtn" onclick="setCategory('Puzzle',this)">🧩 Puzzle</button>
+  <button class="navbtn" onclick="setCategory('Brain',this)">🧠 Brain</button>
+  <button class="navbtn" onclick="setCategory('Casual',this)">🎯 Casual</button>
  </div>
-</section>
+
+ <div class="section-title">
+  <h2>Explore Games</h2><small>Pick your challenge</small>
+ </div>
+ <div class="games" id="games"></div>
+
+ <div class="ad">ADVERTISEMENT SPACE</div>
+
+ <div class="section-title"><h2>🏆 Your achievements</h2></div>
+ <div class="panel" id="achievements"></div>
+
+ <div class="section-title"><h2>⭐ Your leaderboard</h2></div>
+ <div class="panel" id="leaderboard"></div>
+</div>
+
+<div id="gamePage" class="page hidden">
+ <div class="panel">
+  <div class="game-head">
+   <button class="secondary" onclick="goHome()">← Back</button>
+   <h2 id="gameName">Game</h2>
+   <button class="secondary" onclick="restartGame()">↻</button>
+  </div>
+  <div class="game-area" id="gameArea"></div>
+ </div>
+ <div class="ad">ADVERTISEMENT SPACE</div>
+</div>
+
+<div id="infoPage" class="page hidden">
+ <div class="panel info-page">
+  <button class="secondary" onclick="goHome()">← Home</button>
+  <div id="infoContent"></div>
+ </div>
+</div>
+
+</main>
 
 <footer>
- © 2026 PlayZone · Free browser games<br><br>
- Privacy · Contact · About
+ <div style="font-size:20px;color:var(--purple);font-weight:900">PLAYZONE</div>
+ <p>Free browser games for everyone.</p>
+ <button onclick="showInfo('about')">About</button>
+ <button onclick="showInfo('privacy')">Privacy Policy</button>
+ <button onclick="showInfo('terms')">Terms</button>
+ <button onclick="showInfo('contact')">Contact</button>
+ <p>© <span id="year"></span> PlayZone. All rights reserved.</p>
 </footer>
+<div id="toast" class="hidden"></div>
 
 <script>
-const games=[
- {id:'ttt',name:'Tic-Tac-Toe',icon:'❎',cat:'Puzzle',desc:'Challenge yourself or play against a friend.'},
- {id:'memory',name:'Memory Match',icon:'🧠',cat:'Brain',desc:'Find matching cards and test your memory.'},
- {id:'reaction',name:'Reaction Test',icon:'⚡',cat:'Arcade',desc:'How quickly can you react?'},
- {id:'guess',name:'Number Guess',icon:'🔢',cat:'Brain',desc:'Find the secret number in fewer attempts.'},
- {id:'rps',name:'Rock Paper Scissors',icon:'✊',cat:'Arcade',desc:'Challenge the computer.'},
- {id:'2048',name:'2048',icon:'🔲',cat:'Puzzle',desc:'Combine numbers to reach 2048.'}
+/* PLAYZONE FRONTEND GAME ENGINE */
+const $=id=>document.getElementById(id);
+const catalog=[
+ ['ttt','Tic Tac Toe','❎','Puzzle','Play against the computer.'],
+ ['memory','Memory Match','🧠','Brain','Match all the hidden pairs.'],
+ ['reaction','Reaction Test','⚡','Arcade','Test how fast you can react.'],
+ ['guess','Number Guess','🔢','Brain','Find the secret number.'],
+ ['rps','Rock Paper Scissors','✊','Casual','Beat the computer.'],
+ ['2048','2048','🔲','Puzzle','Combine numbers to reach 2048.'],
+ ['click','Click Challenge','🖱️','Arcade','Click as many times as possible.'],
+ ['math','Math Challenge','➗','Brain','Solve quick mathematics questions.'],
+ ['color','Color Match','🎨','Casual','Choose the correct colour.'],
+ ['typing','Typing Test','⌨️','Arcade','Test your typing speed.']
 ];
-let category='All',score=0,game='';
+let category='All',current='',sound=true,audio=null;
+let data=JSON.parse(localStorage.getItem('pz-data')||'{"score":0,"played":0,"high":{},"achievements":[]}');
+function save(){localStorage.setItem('pz-data',JSON.stringify(data));updateStats()}
+function updateStats(){
+ $('totalScore').textContent=data.score;
+ $('playedCount').textContent=data.played;
+ $('gameCount').textContent=catalog.length;
+ $('leaderboard').innerHTML=catalog.map(g=>`<div class="achievement"><span>${g[2]} ${g[1]}</span><b>${data.high[g[0]]||0} pts</b></div>`).join('');
+ $('achievements').innerHTML=[
+ ['first','🎮 First game played'],
+ ['five','🔥 Played five games'],
+ ['score100','⭐ Earned 100 points'],
+ ['memory','🧠 Memory master']
+ ].map(a=>`<div class="achievement"><span>${a[1]}</span><b>${data.achievements.includes(a[0])?'UNLOCKED':'LOCKED'}</b></div>`).join('');
+}
+function earn(points){
+ data.score+=points;data.played++;
+ if(!data.achievements.includes('first'))data.achievements.push('first');
+ if(data.played>=5&&!data.achievements.includes('five'))data.achievements.push('five');
+ if(data.score>=100&&!data.achievements.includes('score100'))data.achievements.push('score100');
+ save();
+}
+function record(id,points){
+ data.high[id]=Math.max(data.high[id]||0,points);
+ earn(points);
+}
+function toast(t){
+ $('toast').textContent=t;$('toast').classList.remove('hidden');
+ setTimeout(()=>$('toast').classList.add('hidden'),2200);
+}
+function beep(freq=500){
+ if(!sound)return;
+ try{audio=audio||new(window.AudioContext||window.webkitAudioContext)();
+ let o=audio.createOscillator(),g=audio.createGain();
+ o.frequency.value=freq;g.gain.value=.045;
+ o.connect(g);g.connect(audio.destination);
+ o.start();o.stop(audio.currentTime+.09)}catch(e){}
+}
+function toggleSound(){sound=!sound;$('soundBtn').textContent=sound?'🔊':'🔇'}
+function toggleTheme(){document.body.classList.toggle('light');localStorage.setItem('pz-theme',document.body.classList.contains('light')?'light':'dark')}
+if(localStorage.getItem('pz-theme')==='light')document.body.classList.add('light');
+$('year').textContent=new Date().getFullYear();
 
 function renderGames(){
- const q=document.getElementById('search').value.toLowerCase();
- document.getElementById('games').innerHTML=games.filter(g=>(category==='All'||g.cat===category)&&g.name.toLowerCase().includes(q)).map(g=>`
- <article class="card">
- <div class="game-icon">${g.icon}</div>
- <h3>${g.name}</h3>
- <p>${g.desc}</p>
- <button class="play" onclick="openGame('${g.id}')">PLAY NOW →</button>
- </article>`).join('');
+ let q=$('search').value.toLowerCase();
+ let list=catalog.filter(g=>(category==='All'||g[3]===category)&&
+ (g[1]+' '+g[3]+' '+g[4]).toLowerCase().includes(q));
+ $('games').innerHTML=list.map(g=>`
+ <article class="game-card">
+  <div class="game-icon">${g[2]}</div>
+  <h3>${g[1]}</h3><p>${g[4]}</p>
+  <div class="meta">${g[3]} · Best: ${data.high[g[0]]||0} pts</div>
+  <button class="playbtn" onclick="openGame('${g[0]}')">PLAY NOW →</button>
+ </article>`).join('')||'<p>No games found.</p>';
 }
-function setCat(c,b){
- category=c;
- document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));
+function setCategory(c,b){
+ category=c;document.querySelectorAll('.navbtn').forEach(x=>x.classList.remove('active'));
  b.classList.add('active');renderGames();
 }
+function goHome(){
+ clearInterval(timer);clearTimeout(timeout);
+ $('gamePage').classList.add('hidden');$('infoPage').classList.add('hidden');
+ $('home').classList.remove('hidden');window.scrollTo(0,0);
+ renderGames();updateStats();
+}
+function showPage(id){
+ $('home').classList.add('hidden');$('gamePage').classList.add('hidden');
+ $('infoPage').classList.add('hidden');$(id).classList.remove('hidden');
+ window.scrollTo(0,0);
+}
+function showInfo(which){
+ let content={
+ about:['About PlayZone','PlayZone is a free browser-game demonstration platform. Our games are designed to run directly in your browser without an account.'],
+ privacy:['Privacy Policy','PlayZone is a frontend-only demo. Your game scores, preferences and achievements are saved locally in your browser using localStorage. This demo does not send gameplay data to a server. Clearing browser data may erase your saved scores.'],
+ terms:['Terms of Use','Use PlayZone for personal entertainment. Do not misuse the website or attempt to disrupt its operation. Games are provided as-is.'],
+ contact:['Contact','For feedback or support, add your own valid contact email address here before publishing.']
+ };
+ let x=content[which];$('infoContent').innerHTML=`<h2>${x[0]}</h2><p>${x[1]}</p><p><b>Important:</b> Update this information to reflect your actual website practices before publishing.</p>`;
+ showPage('infoPage');
+}
+let timer=null,timeout=null;
 function openGame(id){
- game=id;
- document.getElementById('home').classList.add('hidden');
- document.getElementById('gameScreen').classList.remove('hidden');
- document.getElementById('gameTitle').textContent=games.find(x=>x.id===id).name;
- const area=document.getElementById('gameArea');
- area.innerHTML='';
+ current=id;clearInterval(timer);clearTimeout(timeout);
+ $('gameName').textContent=catalog.find(g=>g[0]===id)[1];
+ showPage('gamePage');
+ let a=$('gameArea');a.innerHTML='';
  if(id==='ttt')tic();
  if(id==='memory')memory();
  if(id==='reaction')reaction();
  if(id==='guess')guess();
  if(id==='rps')rps();
  if(id==='2048')game2048();
- window.scrollTo(0,0);
+ if(id==='click')clickGame();
+ if(id==='math')mathGame();
+ if(id==='color')colorGame();
+ if(id==='typing')typingGame();
 }
-function goHome(){
- document.getElementById('gameScreen').classList.add('hidden');
- document.getElementById('home').classList.remove('hidden');
- window.scrollTo(0,0);
-}
-function message(t){document.getElementById('result').textContent=t}
+function restartGame(){if(current)openGame(current)}
+function result(t){let r=$('result');if(r)r.textContent=t}
 
-// TIC TAC TOE
+/* 1 TIC TAC TOE */
 function tic(){
- const a=document.getElementById('gameArea');
- a.innerHTML='<h3 id="result">Your turn: X</h3><div class="board" id="board"></div><button class="bigbtn" onclick="tic()">Restart</button>';
- let b=Array(9).fill('');
- function draw(){
-  document.getElementById('board').innerHTML=b.map((v,i)=>`<button class="cell" onclick="move(${i})">${v}</button>`).join('');
- }
- function move(i){
-  if(b[i]||winner())return;
-  b[i]='X';
-  if(!winner()&&b.includes('')){let empty=b.map((v,i)=>v===''?i:-1).filter(i=>i>=0);b[empty[Math.floor(Math.random()*empty.length)]]='O'}
+ let b=Array(9).fill(''),turn='X',ended=false;
+ $('gameArea').innerHTML='<p id="result">You are X. Computer is O.</p><div class="board" id="board"></div><button class="game-btn" onclick="restartGame()">Restart</button>';
+ function win(p){return [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]].some(x=>x.every(i=>b[i]===p))}
+ function draw(){$('board').innerHTML=b.map((v,i)=>`<button class="cell" onclick="play(${i})">${v}</button>`).join('')}
+ window.play=i=>{
+  if(ended||b[i])return;
+  b[i]='X';beep();
+  if(win('X')){ended=true;result('🎉 You win! +15 points');record('ttt',15);draw();return}
+  if(!b.includes('')){ended=true;result('Draw!');draw();return}
+  let free=b.map((v,i)=>v===''?i:-1).filter(i=>i>=0);
+  let move=free.find(i=>wouldWin(i,'O'))??free.find(i=>wouldWin(i,'X'))??free[Math.floor(Math.random()*free.length)];
+  b[move]='O';
+  if(win('O')){ended=true;result('Computer wins! Try again.')}
+  else if(!b.includes('')){ended=true;result('Draw!')}
+  else result('Your turn!');
   draw();
-  if(winner()){message(winner()+' wins!');}
-  else if(!b.includes(''))message('Draw!');
-  else message('Your turn: X');
- }
- function winner(){
-  for(let [x,y,z] of [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]])
-   if(b[x]&&b[x]===b[y]&&b[y]===b[z])return b[x];
-  return '';
- }
- window.move=move;draw();
+ };
+ function wouldWin(i,p){b[i]=p;let v=win(p);b[i]='';return v}
+ draw();
 }
 
-// MEMORY MATCH
+/* 2 MEMORY */
 function memory(){
  let icons=['🍎','🍋','🍇','🚀','🐱','⚽','🎯','🌟'];
- let cards=[...icons,...icons].sort(()=>Math.random()-.5),open=[],matched=0,lock=false;
- let a=document.getElementById('gameArea');
- a.innerHTML='<h3 id="result">Find all matching pairs</h3><div class="memory" id="mem"></div><button class="bigbtn" onclick="openGame(\'memory\')">Restart</button>';
- function draw(){document.getElementById('mem').innerHTML=cards.map((v,i)=>`<button class="mem" onclick="flip(${i})">${matchedCards.has(i)||open.includes(i)?v:'?'}</button>`).join('')}
- let matchedCards=new Set();
+ let deck=[...icons,...icons].sort(()=>Math.random()-.5),open=[],found=[],busy=false,moves=0;
+ $('gameArea').innerHTML='<p id="result">Find all matching pairs.</p><p id="moves">Moves: 0</p><div class="memory-grid" id="memoryGrid"></div><button class="game-btn" onclick="restartGame()">Restart</button>';
+ function draw(){
+  $('memoryGrid').innerHTML=deck.map((v,i)=>`<button class="mem" onclick="flip(${i})">${found.includes(i)||open.includes(i)?v:'?'}</button>`).join('');
+  $('moves').textContent='Moves: '+moves;
+ }
  window.flip=i=>{
-  if(lock||matchedCards.has(i)||open.includes(i))return;
-  open.push(i);draw();
+  if(busy||found.includes(i)||open.includes(i))return;
+  open.push(i);draw();beep();
   if(open.length===2){
-   lock=true;
-   setTimeout(()=>{
-    if(cards[open[0]]===cards[open[1]]){matchedCards.add(...open);matched+=2}
-    open=[];lock=false;draw();
-    if(matched===16)message('Amazing! You matched all pairs 🎉');
-   },650);
+   moves++;busy=true;
+   timeout=setTimeout(()=>{
+    if(deck[open[0]]===deck[open[1]]){
+     found.push(...open);beep(750);
+    }
+    open=[];busy=false;draw();
+    if(found.length===16){result('🏆 Perfect! +25 points');record('memory',25);data.achievements.push('memory');save()}
+   },600);
   }
  };
  draw();
 }
 
-// REACTION TEST
+/* 3 REACTION */
 function reaction(){
- let a=document.getElementById('gameArea'),start=0,timer;
- a.innerHTML='<h3 id="result">Tap when the screen turns green.</h3><button class="bigbtn" id="react" style="min-height:150px;width:90%;background:#39435d" onclick="reactClick()">START</button>';
- let state='idle';
- window.reactClick=()=>{
-  let b=document.getElementById('react');
+ let state='idle',start=0;
+ $('gameArea').innerHTML='<h3>Reaction speed test</h3><p id="result">Press start. Wait for green, then tap!</p><button id="reactionBtn" class="game-btn" style="width:90%;height:160px;background:#3b4562" onclick="reactionTap()">START</button>';
+ window.reactionTap=()=>{
+  let b=$('reactionBtn');
   if(state==='idle'){
-   state='wait';b.textContent='WAIT...';b.style.background='#a04452';
-   timer=setTimeout(()=>{state='go';start=performance.now();b.textContent='TAP NOW!';b.style.background='#168b65'},1000+Math.random()*3000);
-  }else if(state==='wait'){clearTimeout(timer);state='idle';b.textContent='Too early! Try again';b.style.background='#39435d'}
-  else if(state==='go'){let ms=Math.round(performance.now()-start);state='idle';b.textContent='TRY AGAIN';b.style.background='#39435d';message('Your reaction time: '+ms+' ms')}
- };
-}
-
-// NUMBER GUESS
-function guess(){
- let secret=Math.floor(Math.random()*100)+1,tries=0;
- let a=document.getElementById('gameArea');
- a.innerHTML='<h3>Guess a number between 1 and 100</h3><input class="numinput" id="number" type="number" min="1" max="100" placeholder="Your guess"><button class="bigbtn" onclick="checkGuess()">Guess</button><p id="result">You have unlimited attempts.</p><button class="bigbtn" onclick="openGame(\'guess\')">New game</button>';
- window.checkGuess=()=>{
-  let n=Number(document.getElementById('number').value);if(n<1||n>100)return message('Enter a number from 1 to 100.');
-  tries++;message(n===secret?'🎉 Correct! Attempts: '+tries:n<secret?'Too low! Try higher.':'Too high! Try lower.');
- };
-}
-
-// ROCK PAPER SCISSORS
-function rps(){
- document.getElementById('gameArea').innerHTML='<h3>Choose your move</h3><div id="result">First to play wins!</div><br>'+['✊','✋','✌️'].map((v,i)=>`<button class="bigbtn" onclick="playRps(${i})" style="font-size:25px">${v}</button>`).join('');
- window.playRps=n=>{
-  let c=Math.floor(Math.random()*3),names=['Rock','Paper','Scissors'];
-  let result=n===c?'Draw!':(n-c+3)%3===1?'You win!':'Computer wins!';
-  message('You: '+names[n]+' | Computer: '+names[c]+' — '+result);
- };
-}
-
-// 2048
-function game2048(){
- let board=Array(16).fill(0);
- let a=document.getElementById('gameArea');
- a.innerHTML='<h3 id="result">Use arrow keys or buttons to combine tiles.</h3><div id="tiles" style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;max-width:330px;margin:15px auto"></div><div>'+['↑','←','↓','→'].map((v,i)=>`<button class="bigbtn" onclick="slide(${i})">${v}</button>`).join('')+'</div><button class="bigbtn" onclick="openGame(\'2048\')">Restart</button>';
- function add(){let e=board.map((v,i)=>v===0?i:-1).filter(i=>i>=0);if(e.length)board[e[Math.floor(Math.random()*e.length)]]=Math.random()<.9?2:4}
- function draw(){document.getElementById('tiles').innerHTML=board.map(v=>`<div style="height:65px;border-radius:9px;background:${v?'#6556a0':'#202a43'};display:grid;place-items:center;font-weight:bold;font-size:20px">${v||''}</div>`).join('')}
- add();add();draw();
- window.slide=d=>{
-  let old=board.slice();
-  for(let line=0;line<4;line++){
-   let ids=Array.from({length:4},(_,i)=>d===0?i*4+line:d===1?line*4+i:d===2?(3-i)*4+line:d===3?line*4+3-i);
-   let vals=ids.map(i=>board[i]).filter(v=>v);
-   for(let i=0;i<vals.length-1;i++)if(vals[i]===vals[i+1]){vals[i]*=2;vals.splice(i+1,1)}
-   ids.forEach((id,i)=>board[id]=vals[i]||0);
+   state='wait';b.textContent='WAIT...';b.style.background='#bd5265';
+   timeout=setTimeout(()=>{state='go';start=performance.now();b.textContent='TAP NOW!';b.style.background='#15996c'},1200+Math.random()*2800);
+  }else if(state==='wait'){
+   clearTimeout(timeout);state='idle';b.textContent='Too early! Try again';b.style.background='#3b4562';result('Too early! Wait for green.');
+  }else{
+   let ms=Math.round(performance.now()-start);state='idle';
+   b.textContent='TRY AGAIN';b.style.background='#3b4562';
+   let pts=Math.max(1,Math.round(100-ms/10));
+   result(ms+' ms reaction time! +'+pts+' points');record('reaction',pts);beep(800);
   }
-  if(board.some((v,i)=>v!==old[i]))add();
-  draw();
-  if(board.includes(2048))message('You reached 2048! 🎉');
  };
 }
-renderGames();
-</script>
-</body>
-</html>
-  
+
+/* 4 NUMBER GUESS */
+function guess(){
+ let secret=1+Math.floor(Math.random()*100),tries=0;
+ $('gameArea').innerHTML='<h3>Find the secret number</h3><p>Choose a number between 1 and 100.</p><input class="game-input" id="guessInput" type="number" min="1" max="100" placeholder="Your guess"><br><button class="game-btn" onclick="checkGuess()">GUESS</button><p id="result">Start guessing!</p><button class="secondary" onclick="restartGame()">New number</button>';
+ window.checkGuess=()=>{
+  let n=Number($('guessInput').value);
+  if(!Number.isInteger(n)||n<1||n>100){result('Enter a valid number between 1 and 100.');return}
+  tries++;
+  if(n===secret){let pts=Math.max(5,50-tries*5);result('🎉 Correct in '+tries+' tries! +'+pts+' points');record('guess',pts);beep(850)}
+  else result(n<secret?'Too low! Try higher.':'Too high! Try lower.');
+ };
+}
+
+/* 5 ROCK PAPER SCISSORS */
+function rps(){
+ $('gameArea').innerHTML='<h3>Choose your move</h3><p id="result">Can you beat the computer?</p>'+['✊','✋','✌️'].map((x,i)=>`<button class="game-btn" style="font-size:30px" onclick="rpsPlay(${i})">${x}</button>`).join('')+'<p id="rpsScore"></p>';
+ let wins=0;
+ window.rpsPlay=n=>{
+  let c=Math.floor(Math.random()*3),names=['Rock','Paper','Scissors'];
+  let msg=n===c?'Draw!':(n-c+3)%3===1?'You win!':'Computer wins!';
+  if(msg==='You win!'){wins++;record('rps',5);beep(800)}
+  result('You: '+names[n]+' · Computer: '+names[c]+' · '+msg);
+  $('rpsScore').textContent='Your wins: '+wins;
+ };
+}
+
+/* 6 2048 */
+function game2048(){
+ let board=Array(16).fill(0),points=0;
+ $('gameArea').innerHTML='<p id="result">Use arrow buttons or keyboard arrows.</p><div class="score" id="tileScore">Score: 0</div><div class="tiles" id="tiles"></div><div>'+['↑','←','↓','→'].map((v,i)=>`<button class="game-btn" onclick="slide(${i})">${v}</button>`).join('')+'</div><button class="secondary" onclick="rest

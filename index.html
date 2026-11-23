@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PlayZone - Free Online Games</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0a0d19;color:#fff;font-family:Arial,sans-serif}
+header{padding:20px 6%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #242b40}
+.logo{font-size:25px;font-weight:900;color:#9d83ff}
+.logo span{color:#fff}
+button{cursor:pointer;border:0}
+.theme{background:#222941;color:white;padding:10px;border-radius:10px}
+.hero{text-align:center;padding:45px 15px 30px}
+.hero h1{font-size:clamp(35px,7vw,60px);margin:10px}
+.gradient{background:linear-gradient(90deg,#9b7cff,#4ce2ce);color:transparent;background-clip:text}
+.hero p{color:#a3aec7;line-height:1.6}
+.search{width:min(450px,90%);padding:14px;border-radius:12px;background:#171e31;border:1px solid #303b55;color:white;margin-top:15px}
+.categories{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:10px}
+.cat{padding:10px 17px;border-radius:25px;background:#1b2338;color:#dce3f6}
+.cat.active{background:#8e78f6;color:#fff}
+.grid{max-width:1100px;margin:25px auto;padding:0 18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.card{background:#141c30;border:1px solid #28334c;border-radius:18px;padding:22px;transition:.2s}
+.card:hover{transform:translateY(-5px);border-color:#8c78ff}
+.game-icon{font-size:42px}
+.card h3{margin:12px 0 7px}
+.card p{font-size:13px;color:#9eabc5;min-height:34px}
+.play{width:100%;padding:12px;background:linear-gradient(90deg,#947bff,#4acdbd);color:#101526;font-weight:bold;border-radius:10px}
+.section{max-width:850px;margin:25px auto;padding:0 15px}
+.panel{background:#141c30;border:1px solid #303b55;border-radius:18px;padding:22px;text-align:center}
+.hidden{display:none!important}
+.back{background:#26314c;color:white;padding:10px 15px;border-radius:9px;float:left}
+.game-title{font-size:25px;margin:15px}
+#gameArea{clear:both;padding-top:20px;min-height:300px}
+.bigbtn{padding:13px 20px;background:#8f7bff;color:white;border-radius:10px;margin:5px;font-weight:bold}
+.board{display:grid;grid-template-columns:repeat(3,85px);justify-content:center;gap:8px;margin:20px}
+.cell{height:85px;background:#242d47;border-radius:12px;color:#fff;font-size:30px}
+.memory{display:grid;grid-template-columns:repeat(4,minmax(55px,75px));justify-content:center;gap:9px;margin:20px}
+.mem{height:75px;border-radius:10px;background:#303c60;color:white;font-size:25px}
+.numinput{padding:13px;border-radius:10px;border:1px solid #66718d;background:#0b1222;color:white;width:150px}
+footer{text-align:center;padding:35px;color:#7e8ba6;font-size:12px}
+.ad{max-width:800px;margin:30px auto;border:1px dashed #39435c;padding:22px;text-align:center;color:#687795;font-size:11px}
+.light{background:#edf0fa;color:#172039}
+.light .card,.light .panel{background:white;color:#172039}
+.light .hero p{color:#58647d}
+.light .theme{background:#dce2f3;color:#172039}
+.light .search{background:white;color:#172039}
+.light .cat{background:#dce2f3;color:#172039}
+@media(max-width:500px){header{padding:15px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.card{padding:14px}.game-icon{font-size:34px}.card p{font-size:12px}.board{grid-template-columns:repeat(3,75px)}.cell{height:75px}}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="logo">🎮 PLAY<span>ZONE</span></div>
+ <button class="theme" onclick="document.body.classList.toggle('light')">☼ Theme</button>
+</header>
+
+<div id="home">
+<section class="hero">
+ <h1>WELCOME TO <span class="gradient">PLAYZONE</span></h1>
+ <p>Discover games. Challenge your brain.<br>Play anytime, anywhere. Completely free.</p>
+ <input class="search" id="search" placeholder="🔍 Search games..." oninput="renderGames()">
+</section>
+
+<div class="categories">
+ <button class="cat active" onclick="setCat('All',this)">All Games</button>
+ <button class="cat" onclick="setCat('Puzzle',this)">🧩 Puzzle</button>
+ <button class="cat" onclick="setCat('Arcade',this)">🕹️ Arcade</button>
+ <button class="cat" onclick="setCat('Brain',this)">🧠 Brain</button>
+</div>
+
+<div class="grid" id="games"></div>
+
+<div class="ad">ADVERTISEMENT SPACE</div>
+</div>
+
+<section class="section hidden" id="gameScreen">
+ <div class="panel">
+  <button class="back" onclick="goHome()">← Back</button>
+  <div class="game-title" id="gameTitle"></div>
+  <div id="gameArea"></div>
+ </div>
+</section>
+
+<footer>
+ © 2026 PlayZone · Free browser games<br><br>
+ Privacy · Contact · About
+</footer>
+
+<script>
+const games=[
+ {id:'ttt',name:'Tic-Tac-Toe',icon:'❎',cat:'Puzzle',desc:'Challenge yourself or play against a friend.'},
+ {id:'memory',name:'Memory Match',icon:'🧠',cat:'Brain',desc:'Find matching cards and test your memory.'},
+ {id:'reaction',name:'Reaction Test',icon:'⚡',cat:'Arcade',desc:'How quickly can you react?'},
+ {id:'guess',name:'Number Guess',icon:'🔢',cat:'Brain',desc:'Find the secret number in fewer attempts.'},
+ {id:'rps',name:'Rock Paper Scissors',icon:'✊',cat:'Arcade',desc:'Challenge the computer.'},
+ {id:'2048',name:'2048',icon:'🔲',cat:'Puzzle',desc:'Combine numbers to reach 2048.'}
+];
+let category='All',score=0,game='';
+
+function renderGames(){
+ const q=document.getElementById('search').value.toLowerCase();
+ document.getElementById('games').innerHTML=games.filter(g=>(category==='All'||g.cat===category)&&g.name.toLowerCase().includes(q)).map(g=>`
+ <article class="card">
+ <div class="game-icon">${g.icon}</div>
+ <h3>${g.name}</h3>
+ <p>${g.desc}</p>
+ <button class="play" onclick="openGame('${g.id}')">PLAY NOW →</button>
+ </article>`).join('');
+}
+function setCat(c,b){
+ category=c;
+ document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));
+ b.classList.add('active');renderGames();
+}
+function openGame(id){
+ game=id;
+ document.getElementById('home').classList.add('hidden');
+ document.getElementById('gameScreen').classList.remove('hidden');
+ document.getElementById('gameTitle').textContent=games.find(x=>x.id===id).name;
+ const area=document.getElementById('gameArea');
+ area.innerHTML='';
+ if(id==='ttt')tic();
+ if(id==='memory')memory();
+ if(id==='reaction')reaction();
+ if(id==='guess')guess();
+ if(id==='rps')rps();
+ if(id==='2048')game2048();
+ window.scrollTo(0,0);
+}
+function goHome(){
+ document.getElementById('gameScreen').classList.add('hidden');
+ document.getElementById('home').classList.remove('hidden');
+ window.scrollTo(0,0);
+}
+function message(t){document.getElementById('result').textContent=t}
+
+// TIC TAC TOE
+function tic(){
+ const a=document.getElementById('gameArea');
+ a.innerHTML='<h3 id="result">Your turn: X</h3><div class="board" id="board"></div><button class="bigbtn" onclick="tic()">Restart</button>';
+ let b=Array(9).fill('');
+ function draw(){
+  document.getElementById('board').innerHTML=b.map((v,i)=>`<button class="cell" onclick="move(${i})">${v}</button>`).join('');
+ }
+ function move(i){
+  if(b[i]||winner())return;
+  b[i]='X';
+  if(!winner()&&b.includes('')){let empty=b.map((v,i)=>v===''?i:-1).filter(i=>i>=0);b[empty[Math.floor(Math.random()*empty.length)]]='O'}
+  draw();
+  if(winner()){message(winner()+' wins!');}
+  else if(!b.includes(''))message('Draw!');
+  else message('Your turn: X');
+ }
+ function winner(){
+  for(let [x,y,z] of [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]])
+   if(b[x]&&b[x]===b[y]&&b[y]===b[z])return b[x];
+  return '';
+ }
+ window.move=move;draw();
+}
+
+// MEMORY MATCH
+function memory(){
+ let icons=['🍎','🍋','🍇','🚀','🐱','⚽','🎯','🌟'];
+ let cards=[...icons,...icons].sort(()=>Math.random()-.5),open=[],matched=0,lock=false;
+ let a=document.getElementById('gameArea');
+ a.innerHTML='<h3 id="result">Find all matching pairs</h3><div class="memory" id="mem"></div><button class="bigbtn" onclick="openGame(\'memory\')">Restart</button>';
+ function draw(){document.getElementById('mem').innerHTML=cards.map((v,i)=>`<button class="mem" onclick="flip(${i})">${matchedCards.has(i)||open.includes(i)?v:'?'}</button>`).join('')}
+ let matchedCards=new Set();
+ window.flip=i=>{
+  if(lock||matchedCards.has(i)||open.includes(i))return;
+  open.push(i);draw();
+  if(open.length===2){
+   lock=true;
+   setTimeout(()=>{
+    if(cards[open[0]]===cards[open[1]]){matchedCards.add(...open);matched+=2}
+    open=[];lock=false;draw();
+    if(matched===16)message('Amazing! You matched all pairs 🎉');
+   },650);
+  }
+ };
+ draw();
+}
+
+// REACTION TEST
+function reaction(){
+ let a=document.getElementById('gameArea'),start=0,timer;
+ a.innerHTML='<h3 id="result">Tap when the screen turns green.</h3><button class="bigbtn" id="react" style="min-height:150px;width:90%;background:#39435d" onclick="reactClick()">START</button>';
+ let state='idle';
+ window.reactClick=()=>{
+  let b=document.getElementById('react');
+  if(state==='idle'){
+   state='wait';b.textContent='WAIT...';b.style.background='#a04452';
+   timer=setTimeout(()=>{state='go';start=performance.now();b.textContent='TAP NOW!';b.style.background='#168b65'},1000+Math.random()*3000);
+  }else if(state==='wait'){clearTimeout(timer);state='idle';b.textContent='Too early! Try again';b.style.background='#39435d'}
+  else if(state==='go'){let ms=Math.round(performance.now()-start);state='idle';b.textContent='TRY AGAIN';b.style.background='#39435d';message('Your reaction time: '+ms+' ms')}
+ };
+}
+
+// NUMBER GUESS
+function guess(){
+ let secret=Math.floor(Math.random()*100)+1,tries=0;
+ let a=document.getElementById('gameArea');
+ a.innerHTML='<h3>Guess a number between 1 and 100</h3><input class="numinput" id="number" type="number" min="1" max="100" placeholder="Your guess"><button class="bigbtn" onclick="checkGuess()">Guess</button><p id="result">You have unlimited attempts.</p><button class="bigbtn" onclick="openGame(\'guess\')">New game</button>';
+ window.checkGuess=()=>{
+  let n=Number(document.getElementById('number').value);if(n<1||n>100)return message('Enter a number from 1 to 100.');
+  tries++;message(n===secret?'🎉 Correct! Attempts: '+tries:n<secret?'Too low! Try higher.':'Too high! Try lower.');
+ };
+}
+
+// ROCK PAPER SCISSORS
+function rps(){
+ document.getElementById('gameArea').innerHTML='<h3>Choose your move</h3><div id="result">First to play wins!</div><br>'+['✊','✋','✌️'].map((v,i)=>`<button class="bigbtn" onclick="playRps(${i})" style="font-size:25px">${v}</button>`).join('');
+ window.playRps=n=>{
+  let c=Math.floor(Math.random()*3),names=['Rock','Paper','Scissors'];
+  let result=n===c?'Draw!':(n-c+3)%3===1?'You win!':'Computer wins!';
+  message('You: '+names[n]+' | Computer: '+names[c]+' — '+result);
+ };
+}
+
+// 2048
+function game2048(){
+ let board=Array(16).fill(0);
+ let a=document.getElementById('gameArea');
+ a.innerHTML='<h3 id="result">Use arrow keys or buttons to combine tiles.</h3><div id="tiles" style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;max-width:330px;margin:15px auto"></div><div>'+['↑','←','↓','→'].map((v,i)=>`<button class="bigbtn" onclick="slide(${i})">${v}</button>`).join('')+'</div><button class="bigbtn" onclick="openGame(\'2048\')">Restart</button>';
+ function add(){let e=board.map((v,i)=>v===0?i:-1).filter(i=>i>=0);if(e.length)board[e[Math.floor(Math.random()*e.length)]]=Math.random()<.9?2:4}
+ function draw(){document.getElementById('tiles').innerHTML=board.map(v=>`<div style="height:65px;border-radius:9px;background:${v?'#6556a0':'#202a43'};display:grid;place-items:center;font-weight:bold;font-size:20px">${v||''}</div>`).join('')}
+ add();add();draw();
+ window.slide=d=>{
+  let old=board.slice();
+  for(let line=0;line<4;line++){
+   let ids=Array.from({length:4},(_,i)=>d===0?i*4+line:d===1?line*4+i:d===2?(3-i)*4+line:d===3?line*4+3-i);
+   let vals=ids.map(i=>board[i]).filter(v=>v);
+   for(let i=0;i<vals.length-1;i++)if(vals[i]===vals[i+1]){vals[i]*=2;vals.splice(i+1,1)}
+   ids.forEach((id,i)=>board[id]=vals[i]||0);
+  }
+  if(board.some((v,i)=>v!==old[i]))add();
+  draw();
+  if(board.includes(2048))message('You reached 2048! 🎉');
+ };
+}
+renderGames();
+</script>
+</body>
+</html>
+  
